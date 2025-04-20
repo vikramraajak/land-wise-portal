@@ -36,9 +36,6 @@ const Navbar = () => {
             </li>
           </ul>
         </nav>
-        <button className="bg-urban-green-500 hover:bg-urban-green-600 text-white rounded-md px-4 py-2 transition-colors">
-          Sign In
-        </button>
       </div>
     </header>
   );

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
-import ReviewItem from "@/components/ReviewItem";
+import ReviewItem, { Document } from "@/components/ReviewItem";
 
 // Mock data
 const MOCK_REVIEWS = [
@@ -15,13 +15,13 @@ const MOCK_REVIEWS = [
         title: "Crop Report",
         date: "2024-04-26",
         description: "Monthly yield report with soil analysis",
-        status: "pending"
+        status: "pending" as const
       },
       {
         title: "Water Usage",
         date: "2024-04-25",
         description: "Irrigation and water conservation data",
-        status: "pending"
+        status: "pending" as const
       }
     ],
     paymentAmount: 25000,
@@ -36,19 +36,19 @@ const MOCK_REVIEWS = [
         title: "Land Ownership Documents",
         date: "2024-04-20",
         description: "Verified ownership certificate and boundary details",
-        status: "pending"
+        status: "pending" as const
       },
       {
         title: "Soil Analysis Report",
         date: "2024-04-18",
         description: "Complete soil nutrient and composition analysis",
-        status: "pending"
+        status: "pending" as const
       },
       {
         title: "Water Source Certificate",
         date: "2024-04-15",
         description: "Borewell depth and water quality report",
-        status: "pending"
+        status: "pending" as const
       }
     ],
     paymentAmount: 32000,
@@ -57,11 +57,10 @@ const MOCK_REVIEWS = [
 ];
 
 const DocumentReview = () => {
-  const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null);
   const navigate = useNavigate();
   
   const handleViewDetails = (reviewId: number) => {
-    setSelectedReviewId(reviewId);
+    navigate(`/review/${reviewId}`);
   };
 
   return (
@@ -69,7 +68,7 @@ const DocumentReview = () => {
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden max-w-4xl mx-auto">
           <div className="p-6 border-b">
             <h1 className="text-2xl font-bold">Pending Reviews</h1>
           </div>
@@ -84,7 +83,6 @@ const DocumentReview = () => {
                 paymentAmount={review.paymentAmount}
                 paymentDue={review.paymentDue}
                 onViewDetails={() => handleViewDetails(review.id)}
-                expanded={selectedReviewId === review.id}
               />
             ))}
           </div>

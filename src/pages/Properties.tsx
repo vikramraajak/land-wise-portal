@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import PropertyCard from "@/components/PropertyCard";
+import PropertyDetail from "@/components/PropertyDetail";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -59,6 +60,7 @@ const MOCK_PROPERTIES = [
 
 const Properties = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProperty, setSelectedProperty] = useState<number | null>(null);
   
   const filteredProperties = MOCK_PROPERTIES.filter(property => 
     property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -66,6 +68,24 @@ const Properties = () => {
     property.soilType.toLowerCase().includes(searchTerm.toLowerCase()) ||
     property.waterSource.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
+  const selectedPropertyData = selectedProperty !== null 
+    ? MOCK_PROPERTIES.find(p => p.id === selectedProperty) 
+    : null;
+
+  if (selectedPropertyData) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow container mx-auto px-4 py-8">
+          <PropertyDetail 
+            {...selectedPropertyData}
+            onClose={() => setSelectedProperty(null)}
+          />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -104,7 +124,7 @@ const Properties = () => {
               facilities={property.facilities}
               preferredCrops={property.preferredCrops}
               owner={property.owner}
-              onViewDetails={() => console.log(`Viewing details for ${property.title}`)}
+              onViewDetails={() => setSelectedProperty(property.id)}
             />
           ))}
         </div>

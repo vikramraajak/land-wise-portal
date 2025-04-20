@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-interface Document {
+export interface Document {
   title: string;
   date: string;
   description: string;
