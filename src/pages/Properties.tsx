@@ -1,11 +1,13 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import PropertyCard from "@/components/PropertyCard";
 import PropertyDetail from "@/components/PropertyDetail";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import BackNav from "@/components/BackNav";
+import Footer from "@/components/Footer";
 
 const MOCK_PROPERTIES = [
   {
@@ -58,48 +60,65 @@ const MOCK_PROPERTIES = [
   },
 ];
 
+const getAllProperties = () => {
+  const userProps = JSON.parse(localStorage.getItem("userProperties") || "[]");
+  return [...userProps, ...MOCK_PROPERTIES];
+};
+
 const Properties = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProperty, setSelectedProperty] = useState<number | null>(null);
-  
-  const filteredProperties = MOCK_PROPERTIES.filter(property => 
+  const [properties, setProperties] = useState(getAllProperties());
+
+  useEffect(() => {
+    const reload = () => setProperties(getAllProperties());
+    window.addEventListener("storage", reload);
+    return () => window.removeEventListener("storage", reload);
+  }, []);
+
+  // Re-read on mount and on register
+  useEffect(() => {
+    setProperties(getAllProperties());
+  }, []);
+
+  const filteredProperties = properties.filter(property => 
     property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     property.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    property.soilType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    property.waterSource.toLowerCase().includes(searchTerm.toLowerCase())
+    (property.soilType || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (property.waterSource || "").toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   const selectedPropertyData = selectedProperty !== null 
-    ? MOCK_PROPERTIES.find(p => p.id === selectedProperty) 
+    ? properties.find(p => Number(p.id) === Number(selectedProperty)) 
     : null;
 
   if (selectedPropertyData) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col relative bg-urban-green-50">
         <Navbar />
+        <BackNav />
         <main className="flex-grow container mx-auto px-4 py-8">
           <PropertyDetail 
             {...selectedPropertyData}
             onClose={() => setSelectedProperty(null)}
           />
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-urban-green-50 relative">
       <Navbar />
-      
+      <BackNav />
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-bold text-urban-green-800">Available Properties for Rent</h1>
-          
           <Button className="bg-urban-green-500 hover:bg-urban-green-600">
             For Rent
           </Button>
         </div>
-        
         <div className="relative mb-8">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <Input
@@ -109,7 +128,6 @@ const Properties = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProperties.map((property) => (
             <PropertyCard
@@ -129,6 +147,7 @@ const Properties = () => {
           ))}
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

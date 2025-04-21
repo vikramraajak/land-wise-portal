@@ -1,8 +1,9 @@
 
 import Navbar from "@/components/Navbar";
-import ReviewItem, { Document } from "@/components/ReviewItem";
-import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import ReviewItem from "@/components/ReviewItem";
+import { useParams } from "react-router-dom";
+import BackNav from "@/components/BackNav";
+import Footer from "@/components/Footer";
 
 // Mock data - would be fetched based on the ID in a real application
 const MOCK_REVIEWS = [
@@ -58,44 +59,29 @@ const MOCK_REVIEWS = [
 
 const ReviewDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  
   // Find the review with the matching ID
   const review = MOCK_REVIEWS.find(r => r.id === id);
 
   if (!review) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-urban-green-50 relative">
         <Navbar />
+        <BackNav />
         <main className="flex-grow container mx-auto px-4 py-8">
-          <Button 
-            variant="outline" 
-            className="mb-4"
-            onClick={() => navigate('/document-review')}
-          >
-            Back to Reviews
-          </Button>
           <div className="bg-white rounded-2xl shadow-md p-6">
             <p>Review not found</p>
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-urban-green-50 relative">
       <Navbar />
-      
+      <BackNav />
       <main className="flex-grow container mx-auto px-4 py-8">
-        <Button 
-          variant="outline" 
-          className="mb-4"
-          onClick={() => navigate('/document-review')}
-        >
-          Back to Reviews
-        </Button>
-        
         <div className="bg-white rounded-2xl shadow-md overflow-hidden max-w-4xl mx-auto">
           <ReviewItem
             name={review.name}
@@ -107,6 +93,7 @@ const ReviewDetail = () => {
           />
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

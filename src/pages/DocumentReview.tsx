@@ -1,8 +1,9 @@
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
-import ReviewItem, { Document } from "@/components/ReviewItem";
+import ReviewItem from "@/components/ReviewItem";
+import BackNav from "@/components/BackNav";
+import Footer from "@/components/Footer";
 
 // Mock data
 const MOCK_REVIEWS = [
@@ -58,21 +59,19 @@ const MOCK_REVIEWS = [
 
 const DocumentReview = () => {
   const navigate = useNavigate();
-  
   const handleViewDetails = (reviewId: number) => {
     navigate(`/review/${reviewId}`);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-urban-green-50 relative">
       <Navbar />
-      
+      <BackNav />
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-md overflow-hidden max-w-4xl mx-auto">
           <div className="p-6 border-b">
             <h1 className="text-2xl font-bold">Pending Reviews</h1>
           </div>
-          
           <div>
             {MOCK_REVIEWS.map((review) => (
               <ReviewItem
@@ -88,6 +87,7 @@ const DocumentReview = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

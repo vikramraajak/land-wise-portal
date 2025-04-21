@@ -5,46 +5,56 @@ import Navbar from "@/components/Navbar";
 import ServiceCard from "@/components/ServiceCard";
 import LandRegistrationModal from "@/components/LandRegistrationModal";
 import { useNavigate } from "react-router-dom";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
+  const [submittedProperty, setSubmittedProperty] = useState(null);
   const navigate = useNavigate();
 
+  const handleSubmitProperty = (property: any) => {
+    // Save in localStorage for simplicity (other quick pages read from it on mount)
+    const prev = JSON.parse(localStorage.getItem("userProperties") || "[]");
+    localStorage.setItem("userProperties", JSON.stringify([property, ...prev]));
+    setSubmittedProperty(property);
+    window.dispatchEvent(new Event("storage")); // notify in-tab updates
+    import("@/components/ui/sonner").then(({ toast }) => {
+      toast.success("Land registration submitted successfully!");
+      setTimeout(() => navigate('/properties'), 850); // Delay for toast
+    });
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-urban-green-50">
       <Navbar />
-      
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <section className="bg-white rounded-2xl shadow-md p-8 mb-8 animate-fade-in">
+      <main className="flex-grow container mx-auto px-2 md:px-4 py-8 w-full relative">
+        {/* BackNav not needed on index */}
+        <section className="bg-white rounded-2xl shadow-md p-8 mb-8 max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">Our Services</h2>
-          
           <div className="grid md:grid-cols-3 gap-8">
             <ServiceCard
               title="Land Listing"
               description="List your agricultural land easily and connect with verified farmers"
-              icon={<FileCheck className="w-6 h-6 text-urban-green-600" />}
+              icon={<FileCheck className="w-7 h-7 text-urban-green-600" />}
               actionLabel="Register Land"
               onAction={() => setRegistrationModalOpen(true)}
             />
-            
             <ServiceCard
               title="Secure Transactions"
               description="Safe and verified payment processing for all rentals"
-              icon={<Check className="w-6 h-6 text-urban-green-600" />}
+              icon={<Check className="w-7 h-7 text-urban-green-600" />}
             />
-            
             <ServiceCard
               title="Support"
               description="24/7 customer support for all your needs"
-              icon={<Search className="w-6 h-6 text-urban-green-600" />}
+              icon={<Search className="w-7 h-7 text-urban-green-600" />}
               actionLabel="Browse Properties"
               onAction={() => navigate('/properties')}
             />
           </div>
         </section>
-        
-        <section className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-md p-6 animate-fade-in">
+        <section className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">For Landowners</h2>
             <ul className="space-y-3">
               <li className="flex items-center">
@@ -67,8 +77,7 @@ const Index = () => {
               </li>
             </ul>
           </div>
-          
-          <div className="bg-white rounded-2xl shadow-md p-6 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">For Farmers</h2>
             <ul className="space-y-3">
               <li className="flex items-center">
@@ -93,11 +102,12 @@ const Index = () => {
           </div>
         </section>
       </main>
-      
       <LandRegistrationModal
         isOpen={registrationModalOpen}
         onClose={() => setRegistrationModalOpen(false)}
+        onSubmitProperty={handleSubmitProperty}
       />
+      <Footer />
     </div>
   );
 };
