@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Check, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -18,6 +19,18 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Farmer');
   const [errors, setErrors] = useState<LoginErrors>({});
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user && user.email) {
+      if (user.category === 'Investor') {
+        navigate('/investor-dashboard');
+      } else {
+        navigate('/');
+      }
+    }
+  }, [navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -57,7 +70,7 @@ const Login = () => {
           description: `Welcome back, ${user.name}!`,
         });
         
-        // Redirect based on category - Now properly redirects investors
+        // Redirect based on category
         if (user.category === 'Investor') {
           navigate('/investor-dashboard');
         } else {

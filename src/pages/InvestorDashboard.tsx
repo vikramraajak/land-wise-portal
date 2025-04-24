@@ -1,29 +1,10 @@
 
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import Navbar from "@/components/Navbar";
 import BackNav from "@/components/BackNav";
 import Footer from "@/components/Footer";
-import { useToast } from "@/hooks/use-toast";
 
 const InvestorDashboard = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    // Check if user is logged in and is an investor
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
-    if (!user || !user.category || user.category !== 'Investor') {
-      toast({
-        title: "Access Denied",
-        description: "You must be logged in as an investor to view this page.",
-        variant: "destructive",
-      });
-      navigate('/login');
-    }
-  }, [navigate, toast]);
-
   return (
     <div className="min-h-screen flex flex-col bg-urban-green-50">
       <Navbar />
