@@ -3,6 +3,7 @@ import { Check, FileCheck, Search } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ServiceCard from "@/components/ServiceCard";
 import LandRegistrationModal from "@/components/LandRegistrationModal";
+import UserProfile from "@/components/UserProfile";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 
@@ -26,6 +27,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-urban-green-50">
       <Navbar />
       <main className="flex-grow container mx-auto px-2 md:px-4 py-8 w-full relative">
+        <UserProfile />
         <section className="bg-white rounded-2xl shadow-md p-8 mb-8 max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">Our Services</h2>
           <div className="grid md:grid-cols-3 gap-8">

@@ -1,4 +1,3 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,13 +23,11 @@ const initialState = {
   ownerName: "",
   phone: "",
   email: "",
+  readyToInvest: "",
 };
 
 const LandRegistrationModal = ({ isOpen, onClose, onSubmitProperty }: LandRegistrationModalProps) => {
   const [form, setForm] = useState(initialState);
-
-  // Responsive size for card
-  const cardSize = "max-w-md w-full";
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((f) => ({ ...f, [e.target.id]: e.target.value }));
@@ -43,7 +40,7 @@ const LandRegistrationModal = ({ isOpen, onClose, onSubmitProperty }: LandRegist
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const prop = {
-      id: Date.now(), // simple unique ID
+      id: Date.now(),
       title: form.title,
       location: form.location,
       price: Number(form.price),
@@ -51,11 +48,12 @@ const LandRegistrationModal = ({ isOpen, onClose, onSubmitProperty }: LandRegist
       leaseTerms: "Custom terms",
       soilType: form.soilType,
       waterSource: form.waterSource,
+      readyToInvest: form.readyToInvest,
       facilities: [],
       preferredCrops: [],
       owner: {
         name: form.ownerName,
-        profession: "", // Optionally collect "profession"
+        profession: "",
       },
       description: form.description,
       phone: form.phone,
@@ -152,6 +150,19 @@ const LandRegistrationModal = ({ isOpen, onClose, onSubmitProperty }: LandRegist
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="readyToInvest" className="text-gray-700">Investment Status*</Label>
+            <Select onValueChange={(v) => handleSelect("readyToInvest", v)} value={form.readyToInvest}>
+              <SelectTrigger id="readyToInvest" className="border-urban-green-200">
+                <SelectValue placeholder="Select investment status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Ready">Ready to Invest</SelectItem>
+                <SelectItem value="Not Ready">Not Ready to Invest</SelectItem>
+                <SelectItem value="In Progress">Investment In Progress</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="description" className="text-gray-700">Property Description*</Label>

@@ -1,8 +1,12 @@
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { toast } from "sonner";
+import { pencil } from "lucide-react";
+import LandRegistrationModal from "./LandRegistrationModal";
 
 interface PropertyDetailProps {
+  id: number;
   title: string;
   location: string;
   price: number;
@@ -11,6 +15,7 @@ interface PropertyDetailProps {
   leaseTerms: string;
   soilType: string;
   waterSource: string;
+  readyToInvest?: string;
   facilities: string[];
   preferredCrops: string[];
   owner: {
@@ -21,6 +26,7 @@ interface PropertyDetailProps {
 }
 
 const PropertyDetail = ({
+  id,
   title,
   location,
   price,
@@ -29,21 +35,50 @@ const PropertyDetail = ({
   leaseTerms,
   soilType,
   waterSource,
+  readyToInvest,
   facilities,
   preferredCrops,
   owner,
   onClose,
 }: PropertyDetailProps) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const isInvestor = user.category === "Investor";
+
+  const handleEditSubmit = (updatedProperty: any) => {
+    const properties = JSON.parse(localStorage.getItem("userProperties") || "[]");
+    const updatedProperties = properties.map((p: any) => 
+      p.id === id ? { ...p, ...updatedProperty } : p
+    );
+    
+    localStorage.setItem("userProperties", JSON.stringify(updatedProperties));
+    window.dispatchEvent(new Event("storage"));
+    toast.success("Property updated successfully!");
+    onClose();
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden max-w-4xl mx-auto">
       <div className="p-6 border-b flex justify-between items-center">
         <h2 className="text-2xl font-bold">{title}</h2>
-        <Button 
-          variant="outline" 
-          onClick={onClose}
-        >
-          Back
-        </Button>
+        <div className="flex gap-2">
+          {isInvestor && (
+            <Button 
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={() => setIsEditModalOpen(true)}
+            >
+              <pencil className="w-4 h-4" />
+              Edit
+            </Button>
+          )}
+          <Button 
+            variant="outline" 
+            onClick={onClose}
+          >
+            Back
+          </Button>
+        </div>
       </div>
       
       <div className="p-6">
@@ -84,6 +119,19 @@ const PropertyDetail = ({
           
           <div>
             <h3 className="text-lg font-semibold mb-4">Additional Information</h3>
+            
+            {readyToInvest && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-500 mb-2">Investment Status</p>
+                <Badge variant="outline" className={`
+                  ${readyToInvest === 'Ready' ? 'bg-green-50 border-green-200 text-green-700' : 
+                    readyToInvest === 'Not Ready' ? 'bg-red-50 border-red-200 text-red-700' : 
+                    'bg-yellow-50 border-yellow-200 text-yellow-700'}
+                `}>
+                  {readyToInvest}
+                </Badge>
+              </div>
+            )}
             
             {facilities.length > 0 && (
               <div className="mb-4">
