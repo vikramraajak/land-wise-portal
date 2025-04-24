@@ -69,34 +69,65 @@ const LandRegistrationModal = ({ isOpen, onClose, onSubmitProperty }: LandRegist
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`${cardSize} overflow-y-auto max-h-[80vh] bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl border-0`}>
+      <DialogContent className="w-full max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border-0">
         <DialogHeader>
-          <DialogTitle className="text-xl text-center">Register Your Land</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold text-center text-urban-green-800 mb-4">Register Your Land</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-3 mt-2">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Property Title*</Label>
-            <Input id="title" value={form.title} onChange={handleInput} required />
+            <Label htmlFor="title" className="text-gray-700">Property Title*</Label>
+            <Input 
+              id="title" 
+              value={form.title} 
+              onChange={handleInput} 
+              className="border-urban-green-200 focus:border-urban-green-400"
+              placeholder="Enter property title"
+              required 
+            />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="location">Location*</Label>
-            <Input id="location" value={form.location} onChange={handleInput} required />
+            <Label htmlFor="location" className="text-gray-700">Location*</Label>
+            <Input 
+              id="location" 
+              value={form.location} 
+              onChange={handleInput} 
+              className="border-urban-green-200 focus:border-urban-green-400"
+              placeholder="Enter property location"
+              required 
+            />
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="area">Total Area (acres)*</Label>
-              <Input id="area" type="number" step="0.1" min="0.1" value={form.area} onChange={handleInput} required />
+              <Label htmlFor="area" className="text-gray-700">Total Area (acres)*</Label>
+              <Input 
+                id="area" 
+                type="number" 
+                step="0.1" 
+                min="0.1" 
+                value={form.area} 
+                onChange={handleInput}
+                className="border-urban-green-200 focus:border-urban-green-400" 
+                required 
+              />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="price">Asking Price (₹)*</Label>
-              <Input id="price" type="number" min="1000" value={form.price} onChange={handleInput} required />
+              <Label htmlFor="price" className="text-gray-700">Asking Price (₹)*</Label>
+              <Input 
+                id="price" 
+                type="number" 
+                min="1000" 
+                value={form.price} 
+                onChange={handleInput}
+                className="border-urban-green-200 focus:border-urban-green-400" 
+                required 
+              />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="soilType">Soil Type*</Label>
+              <Label htmlFor="soilType" className="text-gray-700">Soil Type*</Label>
               <Select onValueChange={(v) => handleSelect("soilType", v)} value={form.soilType}>
-                <SelectTrigger id="soilType">
+                <SelectTrigger id="soilType" className="border-urban-green-200">
                   <SelectValue placeholder="Select soil type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -108,9 +139,9 @@ const LandRegistrationModal = ({ isOpen, onClose, onSubmitProperty }: LandRegist
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="waterSource">Water Source*</Label>
+              <Label htmlFor="waterSource" className="text-gray-700">Water Source*</Label>
               <Select onValueChange={(v) => handleSelect("waterSource", v)} value={form.waterSource}>
-                <SelectTrigger id="waterSource">
+                <SelectTrigger id="waterSource" className="border-urban-green-200">
                   <SelectValue placeholder="Select water source" />
                 </SelectTrigger>
                 <SelectContent>
@@ -123,37 +154,68 @@ const LandRegistrationModal = ({ isOpen, onClose, onSubmitProperty }: LandRegist
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Property Description*</Label>
+            <Label htmlFor="description" className="text-gray-700">Property Description*</Label>
             <Textarea
               id="description"
               value={form.description}
               onChange={handleInput}
-              className="min-h-[80px]"
+              className="min-h-[80px] border-urban-green-200 focus:border-urban-green-400"
+              placeholder="Describe your property..."
               required
             />
           </div>
-          <div className="pt-2 border-t">
-            <h3 className="font-medium mb-2">Contact Information</h3>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-2">
-              <Label htmlFor="ownerName">Owner Name*</Label>
-              <Input id="ownerName" value={form.ownerName} onChange={handleInput} required />
+          <div className="pt-4 border-t">
+            <h3 className="font-medium text-gray-700 mb-4">Contact Information</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="ownerName" className="text-gray-700">Owner Name*</Label>
+                <Input 
+                  id="ownerName" 
+                  value={form.ownerName} 
+                  onChange={handleInput}
+                  className="border-urban-green-200 focus:border-urban-green-400"
+                  placeholder="Enter your name"
+                  required 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone" className="text-gray-700">Phone Number*</Label>
+                <Input 
+                  id="phone" 
+                  value={form.phone} 
+                  onChange={handleInput}
+                  className="border-urban-green-200 focus:border-urban-green-400"
+                  placeholder="Enter phone number"
+                  required 
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number*</Label>
-              <Input id="phone" value={form.phone} onChange={handleInput} required />
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="email" className="text-gray-700">Email Address*</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                value={form.email} 
+                onChange={handleInput}
+                className="border-urban-green-200 focus:border-urban-green-400"
+                placeholder="Enter email address"
+                required 
+              />
             </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email Address*</Label>
-            <Input id="email" type="email" value={form.email} onChange={handleInput} required />
-          </div>
-          <div className="flex justify-end space-x-3 pt-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex justify-end space-x-3 pt-4">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onClose}
+              className="border-urban-green-200 text-urban-green-700 hover:bg-urban-green-50"
+            >
               Cancel
             </Button>
-            <Button type="submit" className="bg-urban-green-500 hover:bg-urban-green-600">
+            <Button 
+              type="submit" 
+              className="bg-urban-green-600 hover:bg-urban-green-700 text-white"
+            >
               Submit
             </Button>
           </div>

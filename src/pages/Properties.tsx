@@ -9,76 +9,24 @@ import { Search } from "lucide-react";
 import BackNav from "@/components/BackNav";
 import Footer from "@/components/Footer";
 
-const MOCK_PROPERTIES = [
-  {
-    id: 1,
-    title: "Fertile Agricultural Plot",
-    location: "North Bangalore",
-    price: 25000,
-    acres: 3.2,
-    leaseTerms: "2 years minimum",
-    soilType: "Black Cotton",
-    waterSource: "Canal + Borewell",
-    facilities: ["Borewell", "Storage Shed", "Fencing"],
-    preferredCrops: ["Paddy", "Vegetables"],
-    owner: {
-      name: "Priya Sharma",
-      profession: "Software Engineer",
-    },
-  },
-  {
-    id: 2,
-    title: "Cultivable Land Parcel",
-    location: "Mysore Rural",
-    price: 20000,
-    acres: 2.8,
-    leaseTerms: "3 years minimum",
-    soilType: "Red Soil",
-    waterSource: "Borewell",
-    facilities: ["Power Connection", "Road Access"],
-    preferredCrops: ["Any"],
-    owner: {
-      name: "Arun Kumar",
-      profession: "Bank Manager",
-    },
-  },
-  {
-    id: 3,
-    title: "Premium Farm Land",
-    location: "Hassan District",
-    price: 30000,
-    acres: 4.0,
-    leaseTerms: "5 years minimum",
-    soilType: "Alluvial",
-    waterSource: "River Nearby",
-    facilities: ["Farmhouse", "Equipment Storage", "Power"],
-    preferredCrops: ["Commercial Crops"],
-    owner: {
-      name: "Deepak Verma",
-      profession: "IT Consultant",
-    },
-  },
-];
-
-const getAllProperties = () => {
-  const userProps = JSON.parse(localStorage.getItem("userProperties") || "[]");
-  return [...userProps, ...MOCK_PROPERTIES];
+const getUserProperties = () => {
+  return JSON.parse(localStorage.getItem("userProperties") || "[]");
 };
 
 const Properties = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProperty, setSelectedProperty] = useState<number | null>(null);
-  const [properties, setProperties] = useState(getAllProperties());
+  const [properties, setProperties] = useState(getUserProperties());
 
   useEffect(() => {
-    const reload = () => setProperties(getAllProperties());
+    const reload = () => setProperties(getUserProperties());
     window.addEventListener("storage", reload);
     return () => window.removeEventListener("storage", reload);
   }, []);
 
   // Re-read on mount and on register
   useEffect(() => {
-    setProperties(getAllProperties());
+    setProperties(getUserProperties());
   }, []);
 
   const filteredProperties = properties.filter(property => 
@@ -114,7 +62,7 @@ const Properties = () => {
       <BackNav />
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-urban-green-800">Available Properties for Rent</h1>
+          <h1 className="text-2xl font-bold text-urban-green-800">Your Registered Properties</h1>
           <Button className="bg-urban-green-500 hover:bg-urban-green-600">
             For Rent
           </Button>
@@ -128,24 +76,22 @@ const Properties = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProperties.map((property) => (
-            <PropertyCard
-              key={property.id}
-              title={property.title}
-              location={property.location}
-              price={property.price}
-              acres={property.acres}
-              leaseTerms={property.leaseTerms}
-              soilType={property.soilType}
-              waterSource={property.waterSource}
-              facilities={property.facilities}
-              preferredCrops={property.preferredCrops}
-              owner={property.owner}
-              onViewDetails={() => setSelectedProperty(property.id)}
-            />
-          ))}
-        </div>
+        {filteredProperties.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No properties registered yet.</p>
+            <p className="text-gray-400">Register your first property from the home page!</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProperties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                {...property}
+                onViewDetails={() => setSelectedProperty(property.id)}
+              />
+            ))}
+          </div>
+        )}
       </main>
       <Footer />
     </div>
