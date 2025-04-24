@@ -9,6 +9,9 @@ import Properties from "./pages/Properties";
 import DocumentReview from "./pages/DocumentReview";
 import ReviewDetail from "./pages/ReviewDetail";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import InvestorDashboard from "./pages/InvestorDashboard";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +26,9 @@ const App = () => (
           <Route path="/properties" element={<Properties />} />
           <Route path="/document-review" element={<DocumentReview />} />
           <Route path="/review/:id" element={<ReviewDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/investor-dashboard" element={<InvestorDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

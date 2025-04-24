@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Check, FileCheck, Search } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -13,14 +12,13 @@ const Index = () => {
   const navigate = useNavigate();
 
   const handleSubmitProperty = (property: any) => {
-    // Save in localStorage for simplicity (other quick pages read from it on mount)
     const prev = JSON.parse(localStorage.getItem("userProperties") || "[]");
     localStorage.setItem("userProperties", JSON.stringify([property, ...prev]));
     setSubmittedProperty(property);
-    window.dispatchEvent(new Event("storage")); // notify in-tab updates
+    window.dispatchEvent(new Event("storage"));
     import("@/components/ui/sonner").then(({ toast }) => {
       toast.success("Land registration submitted successfully!");
-      setTimeout(() => navigate('/properties'), 850); // Delay for toast
+      setTimeout(() => navigate('/properties'), 850);
     });
   };
 
@@ -28,7 +26,6 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-urban-green-50">
       <Navbar />
       <main className="flex-grow container mx-auto px-2 md:px-4 py-8 w-full relative">
-        {/* BackNav not needed on index */}
         <section className="bg-white rounded-2xl shadow-md p-8 mb-8 max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">Our Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -101,13 +98,13 @@ const Index = () => {
             </ul>
           </div>
         </section>
+        <LandRegistrationModal
+          isOpen={registrationModalOpen}
+          onClose={() => setRegistrationModalOpen(false)}
+          onSubmitProperty={handleSubmitProperty}
+        />
+        <Footer />
       </main>
-      <LandRegistrationModal
-        isOpen={registrationModalOpen}
-        onClose={() => setRegistrationModalOpen(false)}
-        onSubmitProperty={handleSubmitProperty}
-      />
-      <Footer />
     </div>
   );
 };
