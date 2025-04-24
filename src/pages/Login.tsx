@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Check, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-// Define interface for errors object
 interface LoginErrors {
   email?: string;
   password?: string;
@@ -34,7 +32,7 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
@@ -59,11 +57,11 @@ const Login = () => {
           description: `Welcome back, ${user.name}!`,
         });
         
-        // Redirect based on category
-        if (selectedCategory === 'Investor') {
+        // Redirect based on category - Now properly redirects investors
+        if (user.category === 'Investor') {
           navigate('/investor-dashboard');
         } else {
-          navigate('/'); // Default redirect for Farmer or other categories
+          navigate('/'); // Default redirect for Farmer
         }
       } else {
         // Check if user exists with different category
@@ -101,7 +99,6 @@ const Login = () => {
       </button>
       
       <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-5xl flex flex-col md:flex-row">
-        {/* Left side - Login form */}
         <div className="p-8 md:p-12 w-full md:w-1/2">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>
           <p className="text-gray-600 mb-6">Sign in to your account</p>
@@ -212,7 +209,6 @@ const Login = () => {
           </p>
         </div>
         
-        {/* Right side - Image and info */}
         <div className="hidden md:block w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/lovable-uploads/24600f67-3c2c-4eac-8ddc-cd77bc25260c.png')" }}>
           <div className="h-full flex flex-col justify-between p-12 bg-gradient-to-b from-black/30 to-black/50">
             <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 self-end">
