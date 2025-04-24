@@ -4,6 +4,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Check, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+// Define interface for errors object
+interface LoginErrors {
+  email?: string;
+  password?: string;
+  category?: string;
+  auth?: string;
+}
+
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -11,14 +19,14 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Farmer');
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<LoginErrors>({});
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: LoginErrors = {};
     if (!email.trim()) newErrors.email = "Email is required";
     if (!password) newErrors.password = "Password is required";
     if (!selectedCategory) newErrors.category = "Please select a category";

@@ -4,13 +4,32 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Check, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+// Define interfaces for form data and errors
+interface FormData {
+  name: string;
+  email: string;
+  mobile: string;
+  password: string;
+  confirmPassword: string;
+  category: string;
+}
+
+interface SignupErrors {
+  name?: string;
+  email?: string;
+  mobile?: string;
+  password?: string;
+  confirmPassword?: string;
+  category?: string;
+}
+
 const Signup = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     mobile: '',
@@ -19,7 +38,7 @@ const Signup = () => {
     category: 'Farmer'
   });
   
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<SignupErrors>({});
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -29,7 +48,7 @@ const Signup = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -43,13 +62,13 @@ const Signup = () => {
       } else if (name === 'password' && value !== formData.confirmPassword && formData.confirmPassword) {
         setErrors({...errors, confirmPassword: "Passwords do not match"});
       } else {
-        setErrors({...errors, confirmPassword: null});
+        setErrors({...errors, confirmPassword: undefined});
       }
     }
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: SignupErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required";
     
     if (!formData.email.trim()) {
@@ -101,7 +120,7 @@ const Signup = () => {
     return { userWithEmailExists, userWithMobileExists };
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
@@ -153,7 +172,7 @@ const Signup = () => {
     }
   };
 
-  const handleCategorySelect = (category) => {
+  const handleCategorySelect = (category: string) => {
     setFormData({
       ...formData,
       category
